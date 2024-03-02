@@ -1,6 +1,3 @@
-require_relative "missing_output_error"
-require_relative "output_type_mismatch_error"
-
 module Cuscuz
   module Outputable
     def self.included(base)

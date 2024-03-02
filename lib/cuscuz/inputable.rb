@@ -1,5 +1,3 @@
-require_relative "input_type_mismatch_error"
-
 module Cuscuz
   module Inputable
     def self.included(base)

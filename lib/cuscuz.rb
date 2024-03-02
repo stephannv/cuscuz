@@ -3,6 +3,7 @@
 require_relative "cuscuz/callable"
 require_relative "cuscuz/inputable"
 require_relative "cuscuz/outputable"
+require_relative "cuscuz/errors"
 
 require_relative "cuscuz/failure"
 require_relative "cuscuz/success"

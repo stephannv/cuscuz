@@ -1,5 +1,3 @@
-require_relative "result_type_mismatch_error"
-
 module Cuscuz
   module Callable
     def self.included(base)
