@@ -12,6 +12,8 @@ module Cuscuz
 
         raise Cuscuz::ResultTypeMismatchError.new(self, result.class) unless result.is_a?(Cuscuz::Result)
 
+        validate_outputs(result)
+
         result
       end
     end

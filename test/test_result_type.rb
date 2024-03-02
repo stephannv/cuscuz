@@ -27,7 +27,6 @@ class TestResultType < Minitest::Test
     assert_kind_of AuthorizationFailure, result
   end
 
-
   def test_wrong_result_type
     error = assert_raises(Cuscuz::ResultTypeMismatchError) do
       ReturnWrongResult[]
