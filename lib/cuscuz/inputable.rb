@@ -1,3 +1,5 @@
+require_relative "input_type_mismatch_error"
+
 module Cuscuz
   module Inputable
     def self.included(base)
@@ -44,10 +46,16 @@ module Cuscuz
       def input_initializers
         inputs.map do |name, options|
           <<~RUBY
-            #{name} => #{options[:type]}
+            #{input_type_check(name, options[:type])}
             @__ccz_#{name}__ = #{name}
           RUBY
         end.join("\n")
+      end
+
+      def input_type_check(name, type)
+        <<~RUBY
+          raise Cuscuz::InputTypeMismatchError.new(:#{name}, #{type}, #{name}.class) unless #{name}.is_a?(#{type})
+        RUBY
       end
     end
   end
