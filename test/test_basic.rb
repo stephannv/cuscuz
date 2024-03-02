@@ -3,7 +3,14 @@
 require "test_helper"
 
 class TestBasic < Minitest::Test
-  User = Data.define(:name, :email)
+  class User
+    attr_reader :name, :email
+
+    def initialize(name:, email:)
+      @name = name
+      @email = email
+    end
+  end
 
   class CreateUser
     include Cuscuz
