@@ -25,6 +25,8 @@ class TestResultType < Minitest::Test
     result = ReturnResultSubclass[]
 
     assert_kind_of AuthorizationFailure, result
+    assert_equal result.failure?, true
+    assert_equal result.success?, false
   end
 
   def test_wrong_result_type
