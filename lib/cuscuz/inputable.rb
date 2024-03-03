@@ -5,8 +5,8 @@ module Cuscuz
     end
 
     module ClassMethods
-      def input(name, type)
-        inputs[name] = {type:}
+      def input(name, types)
+        inputs[name] = {types: Array(types)}
 
         define_reader(name)
 
@@ -44,15 +44,18 @@ module Cuscuz
       def input_initializers
         inputs.map do |name, options|
           <<~RUBY
-            #{input_type_check(name, options[:type])}
+            #{input_type_check(name, options[:types])}
             @__ccz_#{name}__ = #{name}
           RUBY
         end.join("\n")
       end
 
-      def input_type_check(name, type)
+      def input_type_check(name, types)
+        checks = types.map { |type| "#{name}.kind_of?(#{type})" }.join(" || ")
+        expected_classes = types.join(" or ")
+
         <<~RUBY
-          raise Cuscuz::InputTypeMismatchError.new(:#{name}, #{type}, #{name}.class) unless #{name}.is_a?(#{type})
+          raise Cuscuz::InputTypeMismatchError.new(:#{name}, "#{expected_classes}", #{name}.class) unless #{checks}
         RUBY
       end
     end
