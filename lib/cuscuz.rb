@@ -9,6 +9,8 @@ require_relative "cuscuz/failure"
 require_relative "cuscuz/success"
 
 module Cuscuz
+  Bool = [TrueClass, FalseClass].freeze  # standard:disable Naming/ConstantName
+
   def self.included(base)
     base.include(Cuscuz::Callable)
     base.include(Cuscuz::Inputable)

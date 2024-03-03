@@ -8,7 +8,7 @@ module Cuscuz
       def input(name, types)
         inputs[name] = {types: Array(types)}
 
-        define_reader(name)
+        define_reader(name, types)
 
         define_initializer
       end
@@ -19,9 +19,11 @@ module Cuscuz
         @inputs ||= {}
       end
 
-      def define_reader(name)
+      def define_reader(name, types)
+        method_name = (types == Bool) ? "#{name}?" : name
+
         class_eval <<-RUBY, __FILE__, __LINE__ + 1
-          def #{name}
+          def #{method_name}
             @__ccz_#{name}__
           end
         RUBY
