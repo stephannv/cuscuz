@@ -6,14 +6,21 @@ module Cuscuz
 
     module ClassMethods
       def [](**args)
-        result = new(**args).call
-
-        raise Cuscuz::ResultTypeMismatchError.new(self, result.class) unless result.is_a?(Cuscuz::Result)
-
-        validate_outputs(result)
-
-        result
+        new(**args).__ccz_call__
       end
+    end
+
+    def call
+    end
+
+    def __ccz_call__
+      result = call
+
+      raise Cuscuz::ResultTypeMismatchError.new(self.class, result.class) unless result.is_a?(Cuscuz::Result)
+
+      __ccz_validate_result_outputs__(result)
+
+      result
     end
   end
 end

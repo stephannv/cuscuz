@@ -1,32 +1,36 @@
+require_relative "internals/output"
+require_relative "internals/result_validator"
+
 module Cuscuz
   module Outputable
     def self.included(base)
       base.extend(ClassMethods)
+      base.define_method :__ccz_validate_result_outputs__, ->(result) {}
     end
 
     module ClassMethods
       def output(name, type)
-        outputs[name] = {type: type}
+        add_output(name, type)
+
+        define_validate_result
       end
 
       private
+
+      def add_output(name, type)
+        outputs[name] = Internals::Output.new(name, type)
+      end
 
       def outputs
         @outputs ||= {}
       end
 
-      def validate_outputs(result)
-        outputs.each do |name, options|
-          unless result.respond_to?(name)
-            raise Cuscuz::MissingOutputError.new(self, name)
-          end
+      def define_validate_result
+        remove_method :__ccz_validate_result_outputs__
 
-          value = result.public_send(name)
+        result_validator = Internals::ResultValidator.new(outputs)
 
-          unless value.is_a?(options[:type])
-            raise Cuscuz::OutputTypeMismatchError.new(name, options[:type], value.class)
-          end
-        end
+        class_eval result_validator.definition, __FILE__, __LINE__
       end
     end
   end
