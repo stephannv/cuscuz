@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class TestBool < Minitest::Test
+class TestBoolInput < Minitest::Test
   class DoSomething
     include Cuscuz
 

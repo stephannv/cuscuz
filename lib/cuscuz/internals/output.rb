@@ -1,11 +1,11 @@
 module Cuscuz
   module Internals
     class Output
-      attr_reader :name, :type
+      attr_reader :name, :types
 
-      def initialize(name, type)
+      def initialize(name, types)
         @name = name
-        @type = type
+        @types = Array(types)
       end
 
       def presence_check_definition
@@ -15,11 +15,14 @@ module Cuscuz
       end
 
       def type_check_definition
-        output_value_var = "#{name}_output_value"
+        variable_name = "__#{name}_value__"
+        checks = types.map { |type| "#{variable_name}.is_a?(#{type})" }.join(" || ")
+        expected_types = types.join(" or ")
+
         <<~RUBY
-          #{output_value_var} = result.#{name}
-          unless #{output_value_var}.kind_of?(#{type})
-            raise Cuscuz::OutputTypeMismatchError.new(:#{name}, #{type}, #{output_value_var}.class)
+          #{variable_name} = result.#{name}
+          unless #{checks}
+            raise Cuscuz::OutputTypeMismatchError.new(:#{name}, "#{expected_types}", #{variable_name}.class)
           end
         RUBY
       end

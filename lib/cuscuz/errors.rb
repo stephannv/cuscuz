@@ -12,8 +12,8 @@ module Cuscuz
   end
 
   class OutputTypeMismatchError < StandardError
-    def initialize(output, expected_type, given_type)
-      super("The `#{output}` output must be of type #{expected_type} but it was #{given_type}")
+    def initialize(output, expected_types, given_type)
+      super("The `#{output}` output must be of type #{expected_types} but it was #{given_type}")
     end
   end
 

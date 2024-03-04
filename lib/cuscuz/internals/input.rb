@@ -21,11 +21,11 @@ module Cuscuz
       end
 
       def type_check_definition
-        checks = types.map { |type| "#{name}.kind_of?(#{type})" }.join(" || ")
-        expected_classes = types.join(" or ")
+        checks = types.map { |type| "#{name}.is_a?(#{type})" }.join(" || ")
+        expected_types = types.join(" or ")
 
         <<~RUBY
-          raise Cuscuz::InputTypeMismatchError.new(:#{name}, "#{expected_classes}", #{name}.class) unless #{checks}
+          raise Cuscuz::InputTypeMismatchError.new(:#{name}, "#{expected_types}", #{name}.class) unless #{checks}
         RUBY
       end
 
